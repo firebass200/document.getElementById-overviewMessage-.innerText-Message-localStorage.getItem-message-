@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV Builder</title>
+
+    <style>
+        /* General styling */
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background-image: url('background.jpg'); /* Add your background image here */
+            background-size: cover;
+            background-position: center;
+            height: 100%;
+            color: white;
+        }
+
+        .container {
+            width: 90%;
+            margin: 0 auto;
+            padding-top: 20px;
+        }
+
+        section {
+            margin-bottom: 50px;
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+        }
+
+        textarea {
+            height: 100px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            text-align: center;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .button:hover {
+            background-color: #218838;
+        }
+
+        #cv-container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+        }
+
+        /* Contact Form */
+        form {
+            text-align: center;
+        }
+
+        form input, form textarea {
+            width: 80%;
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+            border: none;
+        }
+
+        #download-btn {
+            display: block;
+            margin: 0 auto;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Home Page Section -->
+        <section id="home">
+            <h1>Welcome to Ratabane Nkensani </h1>
+            <p>Create your professional CV with ease!</p>
+            <a href="#personal-info" class="button">Get Started</a>
+        </section>
+
+        <div id="cv-container">
+            <!-- Personal Information Section -->
+            <section id="personal-info">
+                <h2>Personal Information</h2>
+                <input type="text" id="name" placeholder="Full Name">
+                <input type="text" id="email" placeholder="Email">
+                <textarea id="bio" placeholder="Short Bio"></textarea>
+            </section>
+
+            <!-- Education Section -->
+            <section id="education">
+                <h2>Education</h2>
+                <input type="text" id="degree" placeholder="Degree">
+                <input type="text" id="institution" placeholder="Institution">
+                <input type="text" id="grad-year" placeholder="Graduation Year">
+            </section>
+
+            <!-- Work Experience Section -->
+            <section id="work-experience">
+                <h2>Work Experience</h2>
+                <input type="text" id="job-title" placeholder="Job Title">
+                <input type="text" id="company" placeholder="Company">
+                <textarea id="job-desc" placeholder="Job Description"></textarea>
+            </section>
+
+            <!-- Skills Section -->
+            <section id="skills">
+                <h2>Skills</h2>
+                <textarea id="skills-list" placeholder="List your skills"></textarea>
+            </section>
+
+            <!-- Projects Section -->
+            <section id="projects">
+                <h2>Projects</h2>
+                <textarea id="projects-list" placeholder="Describe your significant projects"></textarea>
+            </section>
+
+            <!-- Download CV Button -->
+            <button id="download-btn">Download CV</button>
+        </div>
+    </div>
+
+    <!-- JavaScript Section -->
+    <script>
+        // Function to gather CV data and generate a PDF
+        document.getElementById("download-btn").addEventListener("click", function() {
+            const name = document.getElementById("name").value;
+            const email = document.getElementById("email").value;
+            const bio = document.getElementById("bio").value;
+            const degree = document.getElementById("degree").value;
+            const institution = document.getElementById("institution").value;
+            const gradYear = document.getElementById("grad-year").value;
+            const jobTitle = document.getElementById("job-title").value;
+            const company = document.getElementById("company").value;
+            const jobDesc = document.getElementById("job-desc").value;
+            const skills = document.getElementById("skills-list").value;
+            const projects = document.getElementById("projects-list").value;
+
+            const cvData = {
+                name, email, bio, degree, institution, gradYear, jobTitle, company, jobDesc, skills, projects
+            };
+
+            // Save data to localStorage
+            localStorage.setItem("cvData", JSON.stringify(cvData));
+
+            // Create a simple text-based CV structure for download
+            const cvContent = `
+                Name: ${name}
+                Email: ${email}
+                Bio: ${bio}
+                Education: ${degree}, ${institution}, ${gradYear}
+                Work Experience: ${jobTitle} at ${company}
+                Job Description: ${jobDesc}
+                Skills: ${skills}
+                Projects: ${projects}
+            `;
+
+            // Create a Blob from the text and download it
+            const blob = new Blob([cvContent], { type: 'text/plain' });
+            const link = document.createElement('a');
+            link.href = window.URL.createObjectURL(blob);
+            link.download = `${name}_CV.txt`;
+            link.click();
+        });
+
+        // Load data from localStorage if available
+        window.onload = function() {
+            const savedData = localStorage.getItem("cvData");
+            if (savedData) {
+                const cvData = JSON.parse(savedData);
+                document.getElementById("name").value = cvData.name;
+                document.getElementById("email").value = cvData.email;
+                document.getElementById("bio").value = cvData.bio;
+                document.getElementById("degree").value = cvData.degree;
+                document.getElementById("institution").value = cvData.institution;
+                document.getElementById("grad-year").value = cvData.gradYear;
+                document.getElementById("job-title").value = cvData.jobTitle;
+                document.getElementById("company").value = cvData.company;
+                document.getElementById("job-desc").value = cvData.jobDesc;
+                document.getElementById("skills-list").value = cvData.skills;
+                document.getElementById("projects-list").value = cvData.projects;
+            }
+        };
+    </script>
+</body>
+</html>
